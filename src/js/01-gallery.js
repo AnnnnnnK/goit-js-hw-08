@@ -7,48 +7,19 @@ import SimpleLightbox from "simplelightbox";
 
 import "simplelightbox/dist/simple-lightbox.min.css";
 const galleryList = document.querySelector('.gallery');
-// console.log(galleryList);
+console.log(galleryList);
 
-function createMurkup(arr){
-  return arr.map(({original,preview, description })=> `<li class="gallery__item">
-  <a class="gallery__link" href="${original}">
-    <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-    />
-  </a>
-</li>`).join('')
+function createMarkup(arr){
+    return arr.map(({preview, original, description})=>
+    `<li class="gallery__item">
+    <a class="gallery__link" href="${original}">
+       <img class="gallery__image" src="${preview}" alt="${description}" />
+    </a>
+ </li>`
+    ).join('')
 }
- 
-galleryList.insertAdjacentHTML('beforeend', createMurkup(galleryItems))
-galleryList.addEventListener('click', handlerClick);
 
-function handlerClick(evt) {
-    evt.preventDefault();
 
-    if(evt.target === evt.currentTarget){
-        return;
-    }
+galleryList.insertAdjacentHTML("beforeend", createMarkup(galleryItems))
 
-    const src = evt.target.dataset.source;
-    
-    const instance = basicLightbox.create(`
-    <img src="${src}" alt="Picture">
-`)
-
-instance.show()
-
-const visible = instance.visible()
-
-if(visible){
-    galleryList.addEventListener('keydown', handlerKey);
-
-    function handlerKey(evt){
-        if(evt.code === 'Escape'){
-            instance.close()
-        }
-        }
-}
-}
+new SimpleLightbox('.gallery a', { captionsData: "alt", captionDelay: 250, });
